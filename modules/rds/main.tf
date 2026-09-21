@@ -1,6 +1,7 @@
 resource "aws_db_subnet_group" "this" {
   name       = "${var.name}-db-subnets"
   subnet_ids = var.subnet_ids
+  tags       = { Name = "${var.name}-db-subnet-group" }
 }
 
 resource "aws_db_instance" "this" {
@@ -17,5 +18,6 @@ resource "aws_db_instance" "this" {
   multi_az               = true
   publicly_accessible    = false
   skip_final_snapshot    = true
+  tags = { Name = "${var.name}-db" }
 }
 

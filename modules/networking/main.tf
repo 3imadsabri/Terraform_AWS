@@ -20,6 +20,7 @@ resource "aws_subnet" "public" {
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.this.id
+  tags   = { Name = "${var.name}-public-rt" }
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.this.id
@@ -33,8 +34,10 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_security_group" "web" {
-  name   = "${var.name}-web"
-  vpc_id = aws_vpc.this.id
+  name        = "${var.name}-web"
+  description = "Allow HTTP/HTTPS to WordPress"
+  vpc_id      = aws_vpc.this.id
+  tags        = { Name = "${var.name}-web-sg" }
   ingress {
     from_port = 80
     to_port = 80
@@ -56,8 +59,10 @@ resource "aws_security_group" "web" {
 }
 
 resource "aws_security_group" "database" {
-  name   = "${var.name}-database"
-  vpc_id = aws_vpc.this.id
+  name        = "${var.name}-database"
+  description = "Allow MySQL from the WordPress server"
+  vpc_id      = aws_vpc.this.id
+  tags        = { Name = "${var.name}-database-sg" }
   ingress {
     from_port = 3306
     to_port = 3306
